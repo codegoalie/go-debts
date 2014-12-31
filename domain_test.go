@@ -10,7 +10,7 @@ func TestAddPayment(t *testing.T) {
 	newPayment := Payment{1, 200, 2000, time.Now()}
 	account.Add(newPayment)
 	lastPayment := account.Payments[len(account.Payments)-1]
-	if (lastPayment != newPayment) {
+	if lastPayment != newPayment {
 		t.Errorf("MakePayment adds payment. Expected: %f; Got: %f", newPayment.Amount, lastPayment.Amount)
 	}
 }
