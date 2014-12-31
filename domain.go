@@ -23,7 +23,7 @@ type Payment struct {
 	Date time.Time
 }
 
-func (account *Account) MakePayment(payment Payment) error {
+func (account *Account) Add(payment Payment) error {
 	account.Payments = append(account.Payments, payment)
 	return nil
 }
