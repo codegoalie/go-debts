@@ -23,6 +23,11 @@ type Payment struct {
 	Date    time.Time
 }
 
+func (debitor *Debitor) Add(account Account) error {
+	debitor.Accounts = append(debitor.Accounts, account)
+	return nil
+}
+
 func (account *Account) Add(payment Payment) error {
 	account.Payments = append(account.Payments, payment)
 	return nil
