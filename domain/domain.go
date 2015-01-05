@@ -32,3 +32,18 @@ func (account *Account) Add(payment Payment) error {
 	account.Payments = append(account.Payments, payment)
 	return nil
 }
+
+func (account *Account) LastPayment() (Payment, error) {
+	if len(account.Payments) == 0 {
+		return Payment{}, errors.New("Account has no payments")
+	}
+
+	lastPayment := account.Payments[0]
+	for _, payment := range account.Payments {
+		if payment.Date.After(lastPayment.Date) {
+			lastPayment = payment
+		}
+	}
+
+	return lastPayment, nil
+}
