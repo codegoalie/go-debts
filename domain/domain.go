@@ -33,6 +33,14 @@ func (account *Account) Add(payment Payment) error {
 	return nil
 }
 
+func (account *Account) CurrentBalance() float64 {
+	lastPayment, err := account.LastPayment()
+	if err != nil {
+		return 0
+	}
+	return lastPayment.Balance
+}
+
 func (account *Account) LastPayment() (Payment, error) {
 	if len(account.Payments) == 0 {
 		return Payment{}, errors.New("Account has no payments")
