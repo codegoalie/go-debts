@@ -11,7 +11,7 @@ func TestAddAccount(t *testing.T) {
 	debitor.Add(newAccount)
 	lastAccount := debitor.Accounts[len(debitor.Accounts)-1]
 	if lastAccount.ID != newAccount.ID {
-		t.Errorf("Add adds account. Expected: %f; Got: %f", newAccount.Name, lastAccount.Name)
+		t.Errorf("Add adds account. Expected: %s; Got: %s", newAccount.Name, lastAccount.Name)
 	}
 }
 
