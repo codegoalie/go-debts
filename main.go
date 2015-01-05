@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	customer := domain.Debitor{1, "Chris", []domain.Account{}}
+	customer := domain.Debitor{ID: 1, Name: "Chris", Accounts: []domain.Account{}}
 	fmt.Println(customer)
 }
