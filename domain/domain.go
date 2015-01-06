@@ -2,6 +2,7 @@ package domain
 
 import (
 	"time"
+	"errors"
 )
 
 type Debitor struct {
