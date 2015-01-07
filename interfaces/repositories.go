@@ -8,7 +8,7 @@ import (
 )
 
 type DbHandler interface {
-	Excute(statement string)
+	Execute(statement string)
 	Query(statement string) Row
 }
 
