@@ -4,6 +4,13 @@ import (
 	"go-debts/domain"
 )
 
+type UserInteractor struct {
+	UserRepository UserRepository
+	DebitorRepository domain.DebitorRepository
+	AccountRepository domain.AccountRepository
+	PaymentRepository domain.PaymentRepository
+}
+
 type UserRepository interface {
 	FindById(id int) User
 }
@@ -19,11 +26,7 @@ type Account struct {
 	Balance float64
 }
 
-type AccountInteractor struct {
-	UserRepository UserRepository
-}
-
-func (interactor *AccountInteractor) Accounts(userId int) ([]Account, error) {
+func (interactor *UserInteractor) Accounts(userId int) ([]Account, error) {
 	user := interactor.UserRepository.FindById(userId)
 
 	accounts := make([]Account, len(user.Debitor.Accounts))

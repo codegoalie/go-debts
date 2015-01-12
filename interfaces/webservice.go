@@ -3,6 +3,9 @@ package interfaces
 import (
 	"go-debts/usecases"
 	"net/http"
+	"strconv"
+	"io"
+	"fmt"
 )
 
 type WebserviceHandler struct {
@@ -14,7 +17,10 @@ type UserInteractor interface {
 }
 
 func (service *WebserviceHandler) ShowAccounts(res http.ResponseWriter, req *http.Request) {
-	// get value from params
-	// get accounts from interactor
-	// write response
+	userId, _ := strconv.Atoi(req.FormValue("userId"))
+	accounts, _ := service.UserInteractor.Accounts(userId)
+
+	for _, account := range accounts {
+		io.WriteString(res, fmt.Sprintf("%s\t%f", account.Name, account.Balance))
+	}
 }

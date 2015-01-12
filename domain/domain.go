@@ -5,16 +5,28 @@ import (
 	"errors"
 )
 
+type DebitorRepository interface {
+	FindById(id int) Debitor
+}
+
 type Debitor struct {
 	ID       int
 	Name     string
 	Accounts []Account
 }
 
+type AccountRepository interface {
+	FindById(id int) Account
+}
+
 type Account struct {
 	ID       int
 	Name     string
 	Payments []Payment
+}
+
+type PaymentRepository interface {
+	FindById(id int) Payment
 }
 
 type Payment struct {
