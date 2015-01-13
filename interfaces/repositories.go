@@ -99,8 +99,12 @@ func NewDbPaymentRepo(dbHandlers map[string]DbHandler) *DbPaymentRepo {
 func (repo *DbPaymentRepo) FindById(id int) domain.Payment {
 	row := repo.dbHandler.Query(fmt.Sprintf("SELECT amount, balance, paid_at FROM payments WHERE id = %d", id))
 	var amount, balance float64
-	var paidAt time.Time
+	var paidAt string
 	row.Next()
 	row.Scan(&amount, &balance, &paidAt)
-	return domain.Payment{ID: id, Amount: amount, Balance: balance, Date: paidAt}
+	parsedDate, err := time.Parse("2006-01-02 15:04:05", paidAt)
+	if err != nil {
+		fmt.Println("Error parsing paid at tiemstamp for payment ", id, err)
+	}
+	return domain.Payment{ID: id, Amount: amount, Balance: balance, Date: parsedDate}
 }
