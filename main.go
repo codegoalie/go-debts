@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	dbHandler := infrastructure.NewSqliteHandler("/var/tmp/production.sqlite")
+	dbHandler := infrastructure.NewSqliteHandler("/var/tmp/go-debts.sqlite")
 
 	handlers := make(map[string]interfaces.DbHandler)
 	handlers["DbUserRepo"] = dbHandler
