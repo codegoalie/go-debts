@@ -16,7 +16,10 @@ type SqliteRow struct {
 }
 
 func NewSqliteHandler(dbPath string) interfaces.DbHandler {
-	conn, _ := sql.Open("sqlite3", dbPath)
+	conn, err := sql.Open("sqlite3", dbPath)
+	if err != nil {
+		fmt.Println("Cannot open database", err)
+	}
 	sqliteHandler := new(SqliteHandler)
 	sqliteHandler.Conn = conn
 	return sqliteHandler
