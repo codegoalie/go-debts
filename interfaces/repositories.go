@@ -81,7 +81,7 @@ func (repo *DbAccountRepo) FindById(id int) domain.Account {
 	account := domain.Account{ID: id, Name: name}
 	var paymentId int
 	paymentRepo := NewDbPaymentRepo(repo.dbHandlers)
-	row = repo.dbHandler.Query(fmt.Sprintf("SELECT id FROM payments WHERE account_id= %d", id))
+	row = repo.dbHandler.Query(fmt.Sprintf("SELECT id FROM payments WHERE account_id = %d", id))
 	for row.Next() {
 		row.Scan(&paymentId)
 		account.Add(paymentRepo.FindById(paymentId))
