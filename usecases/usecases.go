@@ -35,3 +35,8 @@ func (interactor *UserInteractor) Accounts(userId int) ([]Account, error) {
 	}
 	return accounts, nil
 }
+
+func (interactor *UserInteractor) Debitor(userId int) (domain.Debitor) {
+	user := interactor.UserRepository.FindById(userId)
+	return user.Debitor
+}
