@@ -97,7 +97,7 @@ func NewDbPaymentRepo(dbHandlers map[string]DbHandler) *DbPaymentRepo {
 }
 
 func (repo *DbPaymentRepo) FindById(id int) domain.Payment {
-	row := repo.dbHandler.Query(fmt.Sprintf("SELECT amount, balance, paid_at FROM payments WHERE account_id = %d", id))
+	row := repo.dbHandler.Query(fmt.Sprintf("SELECT amount, balance, paid_at FROM payments WHERE id = %d", id))
 	var amount, balance float64
 	var paidAt time.Time
 	row.Next()
