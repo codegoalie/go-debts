@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"database/sql"
 	"go-debts/interfaces"
+	_ "github.com/mattn/go-sqlite3"
 	"fmt"
 )
 
