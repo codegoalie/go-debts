@@ -74,7 +74,7 @@ func NewDbAccountRepo(dbHandlers map[string]DbHandler) *DbAccountRepo {
 }
 
 func (repo *DbAccountRepo) FindById(id int) domain.Account {
-	row := repo.dbHandler.Query(fmt.Sprintf("SELECT name FROM accounts WHERE account_id = %d", id))
+	row := repo.dbHandler.Query(fmt.Sprintf("SELECT name FROM accounts WHERE id = %d", id))
 	var name string
 	row.Next()
 	row.Scan(&name)
