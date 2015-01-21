@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"net/http"
 	"go-debts/interfaces"
 	"go-debts/infrastructure"
@@ -28,5 +29,9 @@ func main() {
 	http.HandleFunc("/accounts", func(res http.ResponseWriter, req *http.Request) {
 		webserviceHandler.ShowAccounts(res, req)
 	})
-	http.ListenAndServe(":8080", nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	http.ListenAndServe(":" + port, nil)
 }
