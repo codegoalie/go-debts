@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Go Debts</title>
+  </head>
+  <body>
+    <h1>{{ .UserName }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Account</th>
+                <th>Current Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range $account := .Accounts }}
+                <tr>
+                    <td>{{ $account.Name }}
+                    <td style="text-align:right;">${{ $account.Balance | printf "%.2f" }}
+                </tr>
+            {{ else }}
+                <tr><td colspan=2>You have no accounts.</td><tr>
+            {{ end }}
+        </tbody>
+    </table>
+  </body>
+</html>

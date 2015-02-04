@@ -5,12 +5,19 @@ import (
 	"go-debts/domain"
 	"net/http"
 	"strconv"
-	"io"
-	"fmt"
+	// "io"
+	// "fmt"
+	"github.com/unrolled/render"
 )
+
+type AccountsPresenter struct {
+	UserName string
+	Accounts []usecases.Account
+}
 
 type WebserviceHandler struct {
 	UserInteractor UserInteractor
+	Render *render.Render
 }
 
 type UserInteractor interface {
@@ -20,10 +27,11 @@ type UserInteractor interface {
 
 func (service *WebserviceHandler) ShowAccounts(res http.ResponseWriter, req *http.Request) {
 	userId, _ := strconv.Atoi(req.FormValue("userId"))
-	accounts, _ := service.UserInteractor.Accounts(userId)
 
-	io.WriteString(res, fmt.Sprintf("%s\n", service.UserInteractor.Debitor(userId).Name))
-	for _, account := range accounts {
-		io.WriteString(res, fmt.Sprintf("%s\t%.2f\n", account.Name, account.Balance))
-	}
+	accounts, _ := service.UserInteractor.Accounts(userId)
+	presenter := AccountsPresenter{ UserName: service.UserInteractor.Debitor(userId).Name,
+								    Accounts: accounts }
+
+
+	service.Render.HTML(res, http.StatusOK, "accounts/index", presenter)
 }

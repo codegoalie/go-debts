@@ -6,6 +6,7 @@ import (
 	"go-debts/interfaces"
 	"go-debts/infrastructure"
 	"go-debts/usecases"
+	"github.com/unrolled/render"
 )
 
 func main() {
@@ -23,8 +24,11 @@ func main() {
 	userInteractor.AccountRepository = interfaces.NewDbAccountRepo(handlers)
 	userInteractor.PaymentRepository = interfaces.NewDbPaymentRepo(handlers)
 
+	r := render.New()
+
 	webserviceHandler := interfaces.WebserviceHandler{}
 	webserviceHandler.UserInteractor = userInteractor
+	webserviceHandler.Render = r
 
 	http.HandleFunc("/accounts", func(res http.ResponseWriter, req *http.Request) {
 		webserviceHandler.ShowAccounts(res, req)
