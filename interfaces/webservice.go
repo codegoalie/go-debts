@@ -10,10 +10,6 @@ import (
 	"github.com/unrolled/render"
 )
 
-type AccountsPresenter struct {
-	UserName string
-	Accounts []usecases.Account
-}
 
 type WebserviceHandler struct {
 	UserInteractor UserInteractor

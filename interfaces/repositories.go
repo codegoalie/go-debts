@@ -43,6 +43,10 @@ func (repo *DbUserRepo) FindById(id int) usecases.User {
 	return usecases.User{ID: id, Debitor: debitorRepo.FindById(debitorId)}
 }
 
+func (repo *DbUserRepo) AccountsForUser(id int) []usecases.Account {
+	// ...
+}
+
 func NewDbDebitorRepo(dbHandlers map[string]DbHandler) *DbDebitorRepo {
 	dbDebitorRepo := new(DbDebitorRepo)
 	dbDebitorRepo.dbHandlers = dbHandlers
