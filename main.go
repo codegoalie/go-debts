@@ -1,12 +1,12 @@
 package main
 
 import (
-	"os"
-	"net/http"
-	"go-debts/interfaces"
-	"go-debts/infrastructure"
-	"go-debts/usecases"
 	"github.com/unrolled/render"
+	"go-debts/infrastructure"
+	"go-debts/interfaces"
+	"go-debts/usecases"
+	"net/http"
+	"os"
 )
 
 func main() {
@@ -37,5 +37,5 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	http.ListenAndServe(":" + port, nil)
+	http.ListenAndServe(":"+port, nil)
 }
