@@ -1,8 +1,7 @@
 package interfaces
 
 import (
-	"go-debts/usecases"
-	"go-debts/domain"
+	"go-debts/boundaries"
 	"net/http"
 	"strconv"
 	// "io"
@@ -10,24 +9,20 @@ import (
 	"github.com/unrolled/render"
 )
 
-
 type WebserviceHandler struct {
 	UserInteractor UserInteractor
 	Render *render.Render
 }
 
 type UserInteractor interface {
-	Accounts(userId int) ([]usecases.Account, error)
-	Debitor(userId int) (domain.Debitor)
+	PrepareAccounts(userId int) (boundaries.AccountsOutput, error)
 }
 
 func (service *WebserviceHandler) ShowAccounts(res http.ResponseWriter, req *http.Request) {
 	userId, _ := strconv.Atoi(req.FormValue("userId"))
 
-	accounts, _ := service.UserInteractor.Accounts(userId)
-	presenter := AccountsPresenter{ UserName: service.UserInteractor.Debitor(userId).Name,
-								    Accounts: accounts }
+	preparedAccounts, _ := service.UserInteractor.PrepareAccounts(userId)
 
 
-	service.Render.HTML(res, http.StatusOK, "accounts/index", presenter)
+	service.Render.HTML(res, http.StatusOK, "accounts/index", preparedAccounts)
 }

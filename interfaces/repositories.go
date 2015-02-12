@@ -1,7 +1,6 @@
 package interfaces
 
 import (
-	"go-debts/usecases"
 	"go-debts/domain"
 	"fmt"
 	"time"
@@ -34,17 +33,13 @@ func NewDbUserRepo(dbHandlers map[string]DbHandler) *DbUserRepo {
 	return dbUserRepo
 }
 
-func (repo *DbUserRepo) FindById(id int) usecases.User {
+func (repo *DbUserRepo) FindDebitorByUserId(id int) domain.Debitor {
 	row := repo.dbHandler.Query(fmt.Sprintf("SELECT debitor_id FROM users WHERE id = %d LIMIT 1", id))
 	var debitorId int
 	row.Next()
 	row.Scan(&debitorId)
 	debitorRepo := NewDbDebitorRepo(repo.dbHandlers)
-	return usecases.User{ID: id, Debitor: debitorRepo.FindById(debitorId)}
-}
-
-func (repo *DbUserRepo) AccountsForUser(id int) []usecases.Account {
-	// ...
+	return debitorRepo.FindById(debitorId)
 }
 
 func NewDbDebitorRepo(dbHandlers map[string]DbHandler) *DbDebitorRepo {

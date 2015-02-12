@@ -13,40 +13,29 @@ type UserInteractor struct {
 }
 
 type UserRepository interface {
-	FindById(id int) User
+	FindDebitorByUserId(id int) domain.Debitor
 }
 
 type AccountsPresenter struct {
-	UserName string
-	Accounts []Account
+	userName string
+	accounts []boundaries.Account
 }
 
-type User struct {
-	ID int
-	Debitor domain.Debitor
-}
 
-type Account struct {
-	ID int
-	Name string
-	Balance float64
-}
+func (interactor *UserInteractor) PrepareAccounts(userId int) (boundaries.AccountsOutput, error) {
+	debitor := interactor.UserRepository.FindDebitorByUserId(userId)
 
-func (interactor *UserInteractor) Accounts(userId int) (boundaries.AccountsOutput, error) {
-	user := interactor.UserRepository.FindById(userId)
-
-	accounts := make([]Account, len(user.Debitor.Accounts))
-	for i, account := range user.Debitor.Accounts {
-		accounts[i] = Account{ID: account.ID, Name: account.Name, Balance: account.CurrentBalance()}
+	accounts := make([]boundaries.Account, len(debitor.Accounts))
+	for i, domainAccount := range debitor.Accounts {
+		accounts[i] = boundaries.Account{ Name: domainAccount.Name, Balance: domainAccount.CurrentBalance()  }
 	}
-	return accounts, nil
+	return AccountsPresenter{ userName: debitor.Name, accounts: accounts }, nil
 }
 
-func (interactor *UserInteractor) Debitor(userId int) (domain.Debitor) {
-	user := interactor.UserRepository.FindById(userId)
-	return user.Debitor
+func (presenter AccountsPresenter) UserName() string {
+	return presenter.userName
 }
 
-func (presenter *AccountsPresenter) UserName() {
-	return presenter.UserName
+func (presenter AccountsPresenter) Accounts() []boundaries.Account {
+	return presenter.accounts
 }
