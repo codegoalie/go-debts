@@ -1,27 +1,27 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Go Debts</title>
-  </head>
-  <body>
-    <h1>{{ .UserName }}</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Account</th>
-                <th>Current Balance</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{ range $account := .Accounts }}
+<div class="row">
+    <div class="col-md-12">
+        <h1>{{ .UserName }}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $account.Name }}
-                    <td style="text-align:right;">${{ $account.Balance | printf "%.2f" }}
+                    <th>Account</th>
+                    <th>Current Balance</th>
                 </tr>
-            {{ else }}
-                <tr><td colspan=2>You have no accounts.</td><tr>
-            {{ end }}
-        </tbody>
-    </table>
-  </body>
-</html>
+            </thead>
+            <tbody>
+                {{ range $account := .Accounts }}
+                    <tr>
+                        <td>{{ $account.Name }}
+                        <td style="text-align:right;">${{ $account.Balance | printf "%.2f" }}
+                    </tr>
+                {{ else }}
+                    <tr><td colspan=2>You have no accounts.</td><tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>

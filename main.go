@@ -24,7 +24,7 @@ func main() {
 	userInteractor.AccountRepository = interfaces.NewDbAccountRepo(handlers)
 	userInteractor.PaymentRepository = interfaces.NewDbPaymentRepo(handlers)
 
-	r := render.New()
+	r := render.New(render.Options{Layout: "layout"})
 
 	webserviceHandler := interfaces.WebserviceHandler{}
 	webserviceHandler.UserInteractor = userInteractor
