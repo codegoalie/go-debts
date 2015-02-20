@@ -1,12 +1,12 @@
 package usecases
 
 import (
-	"go-debts/domain"
 	"go-debts/boundaries"
+	"go-debts/domain"
 )
 
 type UserInteractor struct {
-	UserRepository UserRepository
+	UserRepository    UserRepository
 	DebitorRepository domain.DebitorRepository
 	AccountRepository domain.AccountRepository
 	PaymentRepository domain.PaymentRepository
@@ -21,15 +21,14 @@ type AccountsPresenter struct {
 	accounts []boundaries.Account
 }
 
-
 func (interactor *UserInteractor) PrepareAccounts(userId int) (boundaries.AccountsOutput, error) {
 	debitor := interactor.UserRepository.FindDebitorByUserId(userId)
 
 	accounts := make([]boundaries.Account, len(debitor.Accounts))
 	for i, domainAccount := range debitor.Accounts {
-		accounts[i] = boundaries.Account{ Name: domainAccount.Name, Balance: domainAccount.CurrentBalance()  }
+		accounts[i] = boundaries.Account{Name: domainAccount.Name, Balance: domainAccount.CurrentBalance()}
 	}
-	return AccountsPresenter{ userName: debitor.Name, accounts: accounts }, nil
+	return AccountsPresenter{userName: debitor.Name, accounts: accounts}, nil
 }
 
 func (presenter AccountsPresenter) UserName() string {
