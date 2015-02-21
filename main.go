@@ -2,40 +2,81 @@ package main
 
 import (
 	"github.com/unrolled/render"
-	"go-debts/infrastructure"
-	"go-debts/interfaces"
-	"go-debts/usecases"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func main() {
-	dbHandler := infrastructure.NewSqliteHandler("/var/tmp/go-debts.sqlite")
-
-	handlers := make(map[string]interfaces.DbHandler)
-	handlers["DbUserRepo"] = dbHandler
-	handlers["DbDebitorRepo"] = dbHandler
-	handlers["DbAccountRepo"] = dbHandler
-	handlers["DbPaymentRepo"] = dbHandler
-
-	userInteractor := new(usecases.UserInteractor)
-	userInteractor.UserRepository = interfaces.NewDbUserRepo(handlers)
-	userInteractor.DebitorRepository = interfaces.NewDbDebitorRepo(handlers)
-	userInteractor.AccountRepository = interfaces.NewDbAccountRepo(handlers)
-	userInteractor.PaymentRepository = interfaces.NewDbPaymentRepo(handlers)
-
 	r := render.New(render.Options{Layout: "layout"})
 
-	webserviceHandler := interfaces.WebserviceHandler{}
-	webserviceHandler.UserInteractor = userInteractor
-	webserviceHandler.Render = r
+	accountController := accountController{r: r}
 
-	http.HandleFunc("/accounts", func(res http.ResponseWriter, req *http.Request) {
-		webserviceHandler.ShowAccounts(res, req)
-	})
+	http.HandleFunc("/accounts", accountController.index)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 	http.ListenAndServe(":"+port, nil)
+}
+
+type accountController struct {
+	r *render.Render
+}
+
+func (controller accountController) index(res http.ResponseWriter, req *http.Request) {
+	userId, _ := strconv.Atoi(req.FormValue("userId"))
+
+	accountsListing := AccountsListingUseCase{gateway: staticUserGateway{}}
+	viewModel := accountsListing.fetchAccountsForUser(userId)
+
+	controller.r.HTML(res, http.StatusOK, "accounts/index", viewModel)
+}
+
+type AccountsListingInput interface {
+	fetchAccountsForUser(userId int) accountViewModel
+}
+
+type AccountsListingUseCase struct {
+	gateway userGateway
+}
+
+func (usecase AccountsListingUseCase) fetchAccountsForUser(userId int) accountViewModel {
+	return accountViewModel{UserName: usecase.gateway.fetchUserById(userId).userName,
+		Accounts: fetchAccountByUserId(userId)}
+}
+
+type accountViewModel struct {
+	UserName string
+	Accounts []account
+}
+
+type account struct {
+	ID      int
+	Name    string
+	Balance float64
+}
+
+type user struct {
+	ID       int
+	email    string
+	userName string
+}
+
+func fetchAccountByUserId(userId int) []account {
+	return []account{
+		account{ID: 3, Name: "Bank of America", Balance: 54.55},
+		account{ID: 4, Name: "Citi Card", Balance: 652.74}}
+}
+
+type userGateway interface {
+	fetchUserById(ID int) user
+}
+
+type staticUserGateway struct {
+}
+
+func (gateway staticUserGateway) fetchUserById(ID int) user {
+	return user{ID: 1, email: "chrismar035@gmail.com", userName: "Chris Marshall"}
 }
