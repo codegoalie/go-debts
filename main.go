@@ -77,15 +77,6 @@ type accountGateway interface {
 	fetchAccountsByDebitorId(debitorId int) []account
 }
 
-type staticAccountGateway struct {
-}
-
-func (gateway staticAccountGateway) fetchAccountsByDebitorId(debitorId int) []account {
-	return []account{
-		account{ID: 3, Name: "Bank of America", Balance: 54.25},
-		account{ID: 4, Name: "Citi Card", Balance: 652.74}}
-}
-
 type dbAccountGateway struct {
 	handler interfaces.DbHandler
 }
@@ -109,13 +100,6 @@ func (gateway dbAccountGateway) fetchAccountsByDebitorId(debitorId int) []accoun
 
 type userGateway interface {
 	fetchDebitorByUserId(userId int) debitor
-}
-
-type staticUserGateway struct {
-}
-
-func (gateway staticUserGateway) fetchDebitorByUserId(userId int) debitor {
-	return debitor{id: userId, name: "Chris Marshall"}
 }
 
 type dbUserGateway struct {
