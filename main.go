@@ -1,41 +1,50 @@
 package main
 
 import (
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/unrolled/render"
 	"go-debts/infrastructure"
 	"go-debts/interfaces"
-	"go-debts/usecases"
 	"net/http"
 	"os"
 )
 
 func main() {
-	dbHandler := infrastructure.NewSqliteHandler("/var/tmp/go-debts.sqlite")
-
-	handlers := make(map[string]interfaces.DbHandler)
-	handlers["DbUserRepo"] = dbHandler
-	handlers["DbDebitorRepo"] = dbHandler
-	handlers["DbAccountRepo"] = dbHandler
-	handlers["DbPaymentRepo"] = dbHandler
-
-	userInteractor := new(usecases.UserInteractor)
-	userInteractor.UserRepository = interfaces.NewDbUserRepo(handlers)
-	userInteractor.DebitorRepository = interfaces.NewDbDebitorRepo(handlers)
-	userInteractor.AccountRepository = interfaces.NewDbAccountRepo(handlers)
-	userInteractor.PaymentRepository = interfaces.NewDbPaymentRepo(handlers)
-
 	r := render.New(render.Options{Layout: "layout"})
 
-	webserviceHandler := interfaces.WebserviceHandler{}
-	webserviceHandler.UserInteractor = userInteractor
-	webserviceHandler.Render = r
+	dbHandler := infrastructure.NewSqliteHandler("/var/tmp/go-debts.sqlite")
 
-	http.HandleFunc("/accounts", func(res http.ResponseWriter, req *http.Request) {
-		webserviceHandler.ShowAccounts(res, req)
-	})
+	accountController := accountController{r: r, handler: dbHandler}
+
+	http.HandleFunc("/accounts", accountController.index)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 	http.ListenAndServe(":"+port, nil)
+}
+
+type AccountsListingInput interface {
+	fetchAccountsForUser(userId int) accountViewModel
+}
+
+type AccountsListingUseCase struct {
+	handler        interfaces.DbHandler
+	userGateway    userGateway
+	accountGateway accountGateway
+}
+
+func (usecase AccountsListingUseCase) fetchAccountsForUser(userId int) accountViewModel {
+	debitor := usecase.userGateway.fetchDebitorByUserId(userId)
+	return accountViewModel{UserName: debitor.name,
+		Accounts: usecase.accountGateway.fetchAccountsByDebitorId(debitor.id)}
+}
+
+type accountGateway interface {
+	fetchAccountsByDebitorId(debitorId int) []account
+}
+
+type userGateway interface {
+	fetchDebitorByUserId(userId int) debitor
 }

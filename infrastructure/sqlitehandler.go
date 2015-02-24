@@ -2,9 +2,9 @@ package infrastructure
 
 import (
 	"database/sql"
-	"go-debts/interfaces"
-	_ "github.com/mattn/go-sqlite3"
 	"fmt"
+	_ "github.com/mattn/go-sqlite3"
+	"go-debts/interfaces"
 )
 
 type SqliteHandler struct {
@@ -30,6 +30,7 @@ func (handler *SqliteHandler) Execute(statement string) {
 }
 
 func (handler *SqliteHandler) Query(statement string) interfaces.Row {
+	fmt.Println("Executing Query: ", statement)
 	rows, err := handler.Conn.Query(statement)
 	if err != nil {
 		fmt.Println("Error running query: ", err)
@@ -41,7 +42,7 @@ func (handler *SqliteHandler) Query(statement string) interfaces.Row {
 	return row
 }
 
-func (row *SqliteRow) Scan(dest ...interface{})  {
+func (row *SqliteRow) Scan(dest ...interface{}) {
 	row.Rows.Scan(dest...)
 }
 
