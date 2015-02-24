@@ -20,7 +20,6 @@ func (gateway dbAccountGateway) fetchAccountsByDebitorId(debitorId int) []accoun
 		paymentRow := gateway.handler.Query(fmt.Sprintf("SELECT balance FROM payments WHERE account_id = %d ORDER BY paid_at DESC LIMIT 1", accountId))
 		paymentRow.Next()
 		paymentRow.Scan(&balance)
-		fmt.Println("Balance: ", balance)
 		accounts = append(accounts, account{ID: accountId, Name: name, Balance: balance})
 	}
 	return accounts

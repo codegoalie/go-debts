@@ -30,7 +30,6 @@ func (handler *SqliteHandler) Execute(statement string) {
 }
 
 func (handler *SqliteHandler) Query(statement string) interfaces.Row {
-	fmt.Println("Executing Query: ", statement)
 	rows, err := handler.Conn.Query(statement)
 	if err != nil {
 		fmt.Println("Error running query: ", err)
