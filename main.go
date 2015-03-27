@@ -41,6 +41,17 @@ func (usecase AccountsListingUseCase) fetchAccountsForUser(userId int) accountsV
 		Accounts: usecase.accountGateway.fetchAccountsByDebitorId(debitor.id)}
 }
 
+type AccountDetailUseCase struct {
+	accountGateway accountGateway
+	paymentGateway paymentGateway
+}
+
+func (usecase AccountDetailUseCase) fetchAccountDetails(accountID int) accountViewModel {
+	account := usecase.accountGateway.fetchAccountByID(accountID)
+	payments := usecase.paymentGateway.fetchPaymentsByAccountID(accountID)
+	return accountViewModel{Account: account, Payments: payments}
+}
+
 type accountGateway interface {
 	fetchAccountsByDebitorId(debitorId int) []account
 	fetchAccountByID(accountID int) account
