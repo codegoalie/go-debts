@@ -24,3 +24,15 @@ func (gateway dbAccountGateway) fetchAccountsByDebitorId(debitorId int) []accoun
 	}
 	return accounts
 }
+
+func (gateway dbAccountGateway) fetchAccountByID(accountID int) account {
+	row := gateway.handler.Query(fmt.Sprintf("SELECT name FROM accounts WHERE id = %d", accountID))
+	var name string
+	var balance float64
+	row.Next()
+	row.Scan(&name)
+	paymentRow := gateway.handler.Query(fmt.Sprintf("SELECT balance FROM payments WHERE account_id = %d ORDER BY paid_at DESC LIMIT 1", accountID))
+	paymentRow.Next()
+	paymentRow.Scan(&balance)
+	return account{Name: name, Balance: balance, ID: accountID}
+}

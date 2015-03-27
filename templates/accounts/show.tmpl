@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-md-2">
+        <a href="/accounts?userId=1">Back to Accounts</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <h1>{{ .Account.Name }}</h1>
+    </div>
+    <div class="col-md-2" style="text-align:right;">
+        <h3>${{ .Account.Balance | printf "%.2f" }}</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range $payment := .Payments }}
+                    <tr>
+                        <td>{{ $payment.PaidAt }}</td>
+                        <td style="text-align:right;">${{ $payment.Amount | printf "%.2f" }}</td>
+                        <td style="text-align:right;">${{ $payment.Balance | printf "%.2f" }}</td>
+                    </tr>
+                {{ else }}
+                    <tr><td colspan=2>This account has no payments.</td><tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>

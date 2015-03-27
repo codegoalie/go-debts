@@ -4,8 +4,8 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <table>
+    <div class="col-md-4">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Account</th>
@@ -15,8 +15,10 @@
             <tbody>
                 {{ range $account := .Accounts }}
                     <tr>
-                        <td>{{ $account.Name }}
-                        <td style="text-align:right;">${{ $account.Balance | printf "%.2f" }}
+                        <td>
+                            <a href="/accounts/{{ $account.ID }}">{{ $account.Name }}</a>
+                        </td>
+                        <td style="text-align:right;">${{ $account.Balance | printf "%.2f" }}</td>
                     </tr>
                 {{ else }}
                     <tr><td colspan=2>You have no accounts.</td><tr>
