@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/unrolled/render"
 	"go-debts/infrastructure"
@@ -16,12 +17,15 @@ func main() {
 
 	accountController := accountController{r: r, handler: dbHandler}
 
-	http.HandleFunc("/accounts", accountController.index)
+	router := mux.NewRouter()
+	router.HandleFunc("/accounts", accountController.index)
+	router.HandleFunc("/accounts/{id:[0-9]+}", accountController.show)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
+	http.Handle("/", router)
 	http.ListenAndServe(":"+port, nil)
 }
 
