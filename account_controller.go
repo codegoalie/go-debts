@@ -13,7 +13,7 @@ type accountController struct {
 	handler interfaces.DbHandler
 }
 
-type accountViewModel struct {
+type accountsViewModel struct {
 	UserName string
 	Accounts []account
 }

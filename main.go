@@ -26,7 +26,7 @@ func main() {
 }
 
 type AccountsListingInput interface {
-	fetchAccountsForUser(userId int) accountViewModel
+	fetchAccountsForUser(userId int) accountsViewModel
 }
 
 type AccountsListingUseCase struct {
@@ -35,9 +35,9 @@ type AccountsListingUseCase struct {
 	accountGateway accountGateway
 }
 
-func (usecase AccountsListingUseCase) fetchAccountsForUser(userId int) accountViewModel {
+func (usecase AccountsListingUseCase) fetchAccountsForUser(userId int) accountsViewModel {
 	debitor := usecase.userGateway.fetchDebitorByUserId(userId)
-	return accountViewModel{UserName: debitor.name,
+	return accountsViewModel{UserName: debitor.name,
 		Accounts: usecase.accountGateway.fetchAccountsByDebitorId(debitor.id)}
 }
 
