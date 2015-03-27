@@ -43,6 +43,7 @@ func (usecase AccountsListingUseCase) fetchAccountsForUser(userId int) accountsV
 
 type accountGateway interface {
 	fetchAccountsByDebitorId(debitorId int) []account
+	fetchAccountByID(accountID int) account
 }
 
 type userGateway interface {
