@@ -49,3 +49,7 @@ type accountGateway interface {
 type userGateway interface {
 	fetchDebitorByUserId(userId int) debitor
 }
+
+type paymentGateway interface {
+	fetchPaymentsByAccountID(accountID int) []payment
+}

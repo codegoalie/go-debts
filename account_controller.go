@@ -29,6 +29,12 @@ type debitor struct {
 	name string
 }
 
+type payment struct {
+	Balance float64
+	Amount  float64
+	PaidAt  string
+}
+
 func (controller accountController) index(res http.ResponseWriter, req *http.Request) {
 	userId, _ := strconv.Atoi(req.FormValue("userId"))
 
